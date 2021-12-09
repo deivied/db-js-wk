@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const schema = mongoose.Schema;
 const courseSchema = new schema({
     id : {
-        type : Number,
+        type : String,
         unique : true
     },
     label: {
@@ -15,15 +15,15 @@ const courseSchema = new schema({
     },
     description : {
         type : String,
-        default : "Cour par defaut"
+        default : "Cours par defaut"
     },
     volume : {
         type : Number,
         min : 1 // pour le type number on utilise min ou max au lieu du minlength de string
     },
-    date : {
+    startDate : {
         type : Date,
-        default : "2021-01-01" 
+        default : "2021-10-18" 
         //default : Date.now ==> Donne la donne qu moment present de l'utilisation 
     }
 });

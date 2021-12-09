@@ -20,6 +20,10 @@ const studentSchema = new schema({
         minlength : 4, //varchar(54) <==> msql
         maxlength : 20
     },
+    tel : {
+        type : Number,
+        unique : true 
+    },
     promotion : {
         type : String,
         default : "2021/2022" 
@@ -27,7 +31,13 @@ const studentSchema = new schema({
     BornDay : {
         type : Date,
         default : "1990-01-01" 
-    }
+    },
+    courses :[
+        {
+            type: mongoose.Types.ObjectId, 
+            ref: 'Course'
+        }
+    ]
 });
 
 const studentModel = mongoose.model('Student', studentSchema);
