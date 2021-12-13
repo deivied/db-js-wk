@@ -1,0 +1,78 @@
+git checkout -b [name branch] pour creer des branches paralleles
+
+// Creation d'un objet de cours 
+let cours = {
+    id: "crs004",
+    label: "HTML",
+    description: "Des cours avec des packages JSON",
+    volume: 4
+};
+// fin Creation d'un objet de cours 
+
+//Creation d'un objet etudiant 
+// let etudiant = {
+//     INE : "2021001DE",
+//     FirstName : "Seynabou",
+//     tel : 771011113,
+//     LastName : "NIANG",
+//     BornDay : "2001-12-31",
+//     courses : ["61b219f55df3a01f75892300", "61b219d01a5efd1a2d9eb8ed"]
+// };
+
+// fin Creation d'un objet de etudiant
+
+const createCourse = async () => {
+        try {
+            const course = await Course.create(cours);
+            console.log(course);
+        } catch (err) {
+            console.error(err.message);
+        }
+    }
+
+    const createStudent = async () => {
+        try {
+            const student = await Student.create(etudiant);
+            console.log(student);
+        } catch (errr) {
+            console.error(errr.message);
+        }
+    }
+
+    const createStudentDeux = async () => {
+        try {
+            let student = await new Student();
+            student.INE = "2019044HT";
+            student.FirstName = "Daouda";
+            student.LastName = "Diouf";
+            student.tel = 771021959;
+            student.BornDay = "1994-01-01";
+            student.courses = ["61b21740e041407e96ed5c10", "61b217a19ec1b7ebdb277fb0"];
+            student.save();
+        } catch (error) {
+            console.log(error.message);
+        }
+    }
+
+
+
+    // Ici on va récupérer les 3 premiers commentaires ayant le pseudo Atinux
+var queryC = Course.find({});
+var queryS = Student.find({});
+queryC.where('_id', queryS.courses);
+queryC.limit(5);
+// peut s'écrire aussi query.where('pseudo', 'Atinux').limit(3);
+queryC.exec(function (err, objets) {
+  if (err) { throw err; }
+  // On va parcourir le résultat et les afficher joliment
+  var objet;
+  for (var i = 0, l = objets.length; i < l; i++) {
+    objet = objets[i];
+    console.log('------------------------------');
+    console.log('Pseudo : ' + comm.pseudo);
+    console.log('Commentaire : ' + comm.contenu);
+    console.log('Date : ' + comm.date);
+    console.log('ID : ' + comm._id);
+    console.log('------------------------------');
+  }
+});

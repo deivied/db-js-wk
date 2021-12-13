@@ -1,80 +1,118 @@
-const Course = require('./model/course');
-const Student = require('./model/student');
-const mongoose = require("mongoose");
-const studentModel = require('./model/student');
+// stoootse : Mettre des await au debut de chaque utilisation de fonction natif
+// stoootse : Mettre des async au debut de chaque declaration de fonction 
 
-const uri = "mongodb://localhost:27017/db";
+(async () => {
+    const Course = require('./model/course');
+    const Student = require('./model/student');
+    const mongoose = require("mongoose");
 
-// Creation d'un objet de cours 
-let cours = {
-    id : "crs004",
-    label : "HTML",
-    description : "Des cours avec des packages JSON",
-    volume : 4
-};
-// fin Creation d'un objet de cours 
 
-//Creation d'un objet etudiant 
-// let etudiant = {
-//     INE : "2021001DE",
-//     FirstName : "Seynabou",
-//     tel : 771011113,
-//     LastName : "NIANG",
-//     BornDay : "2001-12-31",
-//     courses : ["61b219f55df3a01f75892300", "61b219d01a5efd1a2d9eb8ed"]
-// };
 
-// fin Creation d'un objet de etudiant
+    const uri = "mongodb://localhost:27017/db";
 
-const connecter = async () => {
-    try {
-        await mongoose.connect(uri);
-        console.log("YOU ARE CONNECTED TO THE DATABASE");
 
-    } catch (e) {
-        console.error(e.message);
+
+    const connecter = async () => {
+        try {
+            await mongoose.connect(uri);
+            console.log("YOU ARE CONNECTED TO THE DATABASE");
+
+        } catch (e) {
+            console.error(e.message);
+        }
     }
-}
 
-const createCourse = async () => {
-    try {
-        const course = await Course.create(cours);
-        console.log(course);
-    } catch (err) {
-        console.error(err.message);
-    }   
-}
 
-const createStudent = async () => {
-    try {
-        const student = await Student.create(etudiant);
-        console.log(student);
-    } catch (errr) {
-        console.error(errr.message);
-    }   
-}
-
-const createStudentDeux = async () => {
-    try {
-        let student = new Student();
-        student.INE = "2019044HT";
-        student.FirstName = "Daouda";
-        student.LastName = "Diouf";
-        student.tel = 771021959;
-        student.BornDay = "1994-01-01";
-        student.courses = ["61b21740e041407e96ed5c10", "61b217a19ec1b7ebdb277fb0"];
-        student.save();
-    } catch (error) {
-        console.log(error.message);
+    const reqCourses = async (id) => {
+        try {
+            let queryC = await Course.findById(id);
+            return queryC;
+        }
+        catch (error) {
+            console.log(error.message);
+        }
     }
-}
+
+    const reqCumul = async () => {
+        try {
+            let req = await Student.find({})
+            let arrCourseId = [];
+            // console.log(req);
+            for (let j = 0; j < req.length; j++) {
+                arrCourseId.push(req[j]._id);
+            }
+            console.log(arrCourseId);
+            for (let k = 0; k < arrCourseId.length; k++) {
+                let vol = 0;
+                let label = [];
+                let array = (await reqStudents(arrCourseId[k])).courses;
+                for (let i = 0; i < array.length; i++) {
+                    const element = array[i];
+                    label.push((await reqCourses(element)).label)
+                    vol += (await reqCourses(element)).volume;
+                }
+                console.log('________________________Student list_____________________________');
+                console.log("       Student : " + req[k].FirstName + " " + req[k].LastName);
+                console.log("       label : " + label);
+                console.log("       Volume Horaire : " + vol);
+            }
+        } catch (error) {
+            console.log(error.message)
+        }
+    }
+    const reqStudents = async (id) => {
+        try {
+            let queryS = await Student.findById(id);
+            return queryS;
+        } catch (error) {
+            console.log(error.message);
+        }
+    }
 
 
 
-connecter();
-// createCourse();
-createStudentDeux();
+
+    await connecter();
+
+    const idStudent3 = '61b220b6436d7914b8c22138';
+
+    let studentOb = await reqStudents(idStudent3);
+    let courseObjh = (await reqCourses(studentOb.courses[0])).volume;
+    // console.log(courseObjh);
+    let array = studentOb.courses;
+
+    // let req = await Student.find({})
+    // let arrCourseId = [];
+    // // console.log(req);
+    // for (let j = 0; j < req.length; j++) {
+    //     arrCourseId.push(req[j]._id);
+    // }
+    // console.log(arrCourseId);
+    // for (let k = 0; k < arrCourseId.length; k++) {
+    //     let vol = 0;
+    //     let label = [];
+    //     let array = (await reqStudents(arrCourseId[k])).courses;
+    //     for (let i = 0; i < array.length; i++) {
+    //         const element = array[i];
+    //         label.push((await reqCourses(element)).label)
+    //         vol += (await reqCourses(element)).volume;
+    //     }
+    //     console.log('________________________Student list_____________________________');
+    //     console.log("       Student : " + req[k].FirstName + " " + req[k].LastName);
+    //     console.log("       label : " + label);
+    //     console.log("       Volume Horaire : " + vol);
+    // }
+    await reqCumul();
+
+    // QVEC LA METHODE MAP()
+    let req = await Student.find({})
+    let arrCourseId = [];
+
+    req.map(objets => {
+        let objetId = objetId.push(objets.course)
+        let array = (await reqStudents(objetId)).courses;
+
+    });
 
 
-
-
+})();
