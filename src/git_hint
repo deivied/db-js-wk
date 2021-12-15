@@ -76,3 +76,28 @@ queryC.exec(function (err, objets) {
     console.log('------------------------------');
   }
 });
+
+// let objectsCour = (objectsStud.).map(objectC => {
+    //     (objectC.courses).map(async id => { 
+    //         cptVol += ((await Course.findById(id)).volume);
+    //         console.log(cptVol)
+    //     });
+    //     return {total : cptVol};
+    // });
+
+    
+    // let objectsCour = objectsStud.map( objectC => {
+    //     (objectC.courses).map( id => {
+    //         let objetCourse = Course.findById(id);
+    //         let cptVol;
+    //         let arrayLab=[];
+    //         arrayLab.push(objectC.label, objectC.volume)
+    //         cptVol += objetCourse.volume;
+
+    //         return {
+    //             "total courses" : cptVol,
+    //             courses : 
+    //         }
+
+    //     });
+    // });

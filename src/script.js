@@ -22,7 +22,6 @@
         }
     }
 
-
     const reqCourses = async (id) => {
         try {
             let queryC = await Course.findById(id);
@@ -106,13 +105,37 @@
 
     // QVEC LA METHODE MAP()
     let req = await Student.find({})
-    let arrCourseId = [];
-
-    req.map(objets => {
-        let objetId = objetId.push(objets.course)
-        let array = (await reqStudents(objetId)).courses;
-
+    let arrCourse = {};
+    let tab = [];
+    let cptVol ;
+    let objectsStud = req.map(object => {
+        arrCourse.name = object.FirstName+' '+object.LastName;
+        arrCourse.courses = object.courses;
+        tab.push(arrCourse)
+        arrCourse = {};
+        return tab;
     });
+    objectsStud = objectsStud[0];
+    console.log(objectsStud)
 
+    let arrayCourses = objectsStud.map(function(object) {   
+        let arraysId = object.courses.map(tabUn => {
+            return tabUn;
+        });
+        return arraysId
+    });
+    console.log(arrayCourses)
+    // let objArrC = [];
+    // let labCourses = arrayCourses.map(async idArray => {
+    //     let objectArr = await idArray.forEach(async element => {
+    //         let objectC = await Course.findById(element);
+    //         objArrC.push(objectC);
+    //         return objArrC;
+    //     });
+    //     return objectArr;
+    // });
+    // console.log(labCourses)
+
+    
 
 })();
